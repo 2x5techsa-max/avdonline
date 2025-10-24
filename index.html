@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AV Designs — Quote Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { av:'rgb(4 120 87)', avlight:'rgb(16 185 129)', border:'#e5e7eb' }, boxShadow:{card:'0 10px 25px -20px rgba(0,0,0,0.25)',glow:'0 4px 20px rgba(4,120,87,0.3)'} } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#ffffff}
+    .tooltip{position:relative;display:inline-block}
+    .tooltip .tooltiptext{visibility:hidden;width:100px;background-color:#047857;color:#fff;text-align:center;border-radius:6px;padding:4px 0;position:absolute;z-index:1;bottom:135%;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .3s;font-size:.75rem;white-space:nowrap}
+    .tooltip:hover .tooltiptext{visibility:visible;opacity:1}
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:50}
+    .modal.open{display:flex}
+  </style>
+  <!-- hCaptcha disabled in preview; loaded dynamically only if a real site key is provided. -->
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+  <main class="w-full max-w-3xl text-center">
+
+    <!-- LOGO -->
+    <img src="http://avdesigns.org/wp-content/uploads/2016/10/cropped-cropped-ourlogo-1.png" alt="AVD Logo" class="w-20 h-auto mx-auto"/>
+
+    <!-- TITLE + SUBTITLE -->
+    <h1 class="mt-6 text-3xl md:text-4xl font-extrabold text-gray-800">AV Designs Quote Portal</h1>
+    <p class="mt-2 text-gray-500">How can we help you create something beautiful?</p>
+
+    <!-- FULL-WIDTH CONTACT BUTTONS WITH ICONS -->
+    <div class="flex w-full justify-between gap-4 mt-6 mb-10">
+      <div class="tooltip flex-1">
+        <a href="mailto:?subject=AVD%20Enquiry" class="flex justify-center items-center w-full py-3 rounded-lg border border-av text-av bg-white hover:bg-green-50 transition">
+          <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email" class="w-6 h-6"/>
+        </a>
+        <span class="tooltiptext">Email us</span>
+      </div>
+      <div class="tooltip flex-1">
+        <a href="https://wa.me/27835921101?text=Hi%20AVD%2C%20I%27d%20like%20a%20quote" target="_blank" class="flex justify-center items-center w-full py-3 rounded-lg border border-av text-av bg-white hover:bg-green-50 transition">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="w-6 h-6"/>
+        </a>
+        <span class="tooltiptext">WhatsApp us</span>
+      </div>
+      <div class="tooltip flex-1">
+        <a href="tel:+27835921101" class="flex justify-center items-center w-full py-3 rounded-lg border border-av text-av bg-white hover:bg-green-50 transition">
+          <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Phone" class="w-6 h-6"/>
+        </a>
+        <span class="tooltiptext">Call us</span>
+      </div>
+    </div>
+
+    <!-- CTA CARDS -->
+    <div class="mt-8 space-y-6 text-center">
+      <button id="btnBlinds" class="w-full rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
+        <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">▮▮</div>
+        <div>
+          <div class="text-xl font-bold text-gray-800">Blinds &amp; Window Treatments</div>
+          <div class="text-gray-600">For curtains, shutters, venetians, and general window coverings.</div>
+        </div>
+      </button>
+
+      <button id="btnWood" class="w-full rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
+        <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">🪵</div>
+        <div>
+          <div class="text-xl font-bold text-gray-800">Bespoke Wooden Items</div>
+          <div class="text-gray-600">For custom furniture, coffee tables, shelving, and unique installations.</div>
+        </div>
+      </button>
+
+      <button id="btnLaser" class="w-full rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
+        <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">✨</div>
+        <div>
+          <div class="text-xl font-bold text-gray-800">Laser Etching / Burning</div>
+          <div class="text-gray-600">Perfect for signage, gifts, and branded pieces — wood, leather, or metal.</div>
+        </div>
+      </button>
+
+      <button id="btnGeneral" class="w-full mx-auto rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
+        <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">◎</div>
+        <div>
+          <div class="text-xl font-bold text-gray-800">General / Other Projects</div>
+          <div class="text-gray-600">If your request doesn’t fit the categories above, tell us your idea.</div>
+        </div>
+      </button>
+    </div>
+  </main>
+
+  <!-- MODALS (hidden by default) -->
+  <div id="modal-blinds" class="modal">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xl font-bold text-av">Blinds & Window Treatments — Quote</h3>
+        <button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button>
+      </div>
+      <form id="form-blinds" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Quantity</label><input name="qty" type="number" min="1" value="1" class="w-full rounded-lg border border-border p-3" required></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Width (mm)</label><input name="width" type="number" min="200" class="w-full rounded-lg border border-border p-3" required></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Drop (mm)</label><input name="drop" type="number" min="200" class="w-full rounded-lg border border-border p-3" required></div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Blind material</label>
+          <select id="b_material" name="material" class="w-full rounded-lg border border-border p-3">
+            <option value="FB01">FB01 — Standard</option>
+            <option value="FB02">FB02 — Premium</option>
+            <option value="OTHER">Other (specify…)</option>
+          </select>
+          <div id="b_material_other_wrap" class="mt-2 hidden">
+            <input id="b_material_other" name="material_other" class="w-full rounded-lg border border-border p-3" placeholder="Type the material / colour / supplier" />
+          </div>
+        </div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Picture of space</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes</label><textarea name="notes" rows="3" class="w-full rounded-lg border border-border p-3"></textarea></div>
+        <div class="md:col-span-2 flex gap-3 pt-2">
+          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
+          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-wood" class="modal">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
+      <div class="flex items-center justify-between mb-2"><h3 class="text-xl font-bold text-av">Bespoke Wooden Items — Brief</h3><button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button></div>
+      <form id="form-wood" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Picture of desired item</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes / Description</label><textarea name="notes" rows="4" class="w-full rounded-lg border border-border p-3"></textarea></div>
+        <div class="md:col-span-2 flex gap-3 pt-2">
+          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
+          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-laser" class="modal">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
+      <div class="flex items-center justify-between mb-2"><h3 class="text-xl font-bold text-av">Laser Etching / Burning — Brief</h3><button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button></div>
+      <form id="form-laser" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Artwork / Picture</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes / Description</label><textarea name="notes" rows="4" class="w-full rounded-lg border border-border p-3"></textarea></div>
+        <div class="md:col-span-2 flex gap-3 pt-2">
+          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
+          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-general" class="modal">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
+      <div class="flex items-center justify-between mb-2"><h3 class="text-xl font-bold text-av">General / Other Projects — Brief</h3><button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button></div>
+      <form id="form-general" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
+        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Reference picture (optional)</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
+        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes / Description</label><textarea name="notes" rows="4" class="w-full rounded-lg border border-border p-3"></textarea></div>
+        <div class="md:col-span-2 flex gap-3 pt-2">
+          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
+          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AFTER-SUBMIT ACTIONS BAR -->
+  <div id="afterbar" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden z-50">
+    <div class="bg-white border border-border shadow-xl rounded-xl px-4 py-3 flex items-center gap-3">
+      <div class="text-sm text-gray-700">Send this message via:</div>
+      <button id="ab_whatsapp" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm font-semibold">WhatsApp</button>
+      <button id="ab_email" class="px-3 py-2 rounded-lg border border-border text-gray-800 text-sm bg-white">Email</button>
+      <button id="ab_close" class="ml-1 text-gray-400 hover:text-gray-600">✕</button>
+    </div>
+  </div>
+
+  <!-- RUNTIME -->
+  <script>
+    // open/close modals
+    const modals = {
+      blinds: document.getElementById('modal-blinds'),
+      wood: document.getElementById('modal-wood'),
+      laser: document.getElementById('modal-laser'),
+      general: document.getElementById('modal-general'),
+    };
+    const open = (m)=> modals[m].classList.add('open');
+    const closeAll = ()=> Object.values(modals).forEach(m=>m.classList.remove('open'));
+
+    document.getElementById('btnBlinds').onclick = ()=> open('blinds');
+    document.getElementById('btnWood').onclick   = ()=> open('wood');
+    document.getElementById('btnLaser').onclick  = ()=> open('laser');
+    document.getElementById('btnGeneral').onclick= ()=> open('general');
+    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', closeAll));
+    document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click', (e)=>{ if(e.target===m) closeAll(); }));
+
+    // BACKEND submit (with offline fallback)
+    async function sendSubmission(flow, formEl){
+      const fd = new FormData(formEl);
+      fd.append('flow', flow);
+      // attach hCaptcha token
+      const token = await executeCaptcha(formEl);
+      if (token) fd.append('hcaptcha_token', token);
+      try{
+        const res = await fetch('/.netlify/functions/createSubmission', { method:'POST', body: fd });
+        const data = await res.json().catch(()=>({}));
+        if(res.ok && data.ok){ return { mode:'netlify', data: data.submission }; }
+        throw new Error(data.error || 'Server rejected');
+      }catch(err){
+        // offline/local fallback
+        const entry = Object.fromEntries([...new FormData(formEl).entries()]);
+        entry.id = 'local-' + Date.now();
+        entry.flow = flow;
+        entry.ts = new Date().toISOString();
+        const KEY='avd_submissions_local';
+        const list = JSON.parse(localStorage.getItem(KEY) || '[]');
+        list.unshift(entry);
+        localStorage.setItem(KEY, JSON.stringify(list));
+        return { mode:'local', data: entry };
+      }
+    }
+
+    function bindSubmit(id, flow){
+      const form = document.getElementById(id);
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        const txt = btn.textContent; btn.textContent = 'Submitting…'; btn.disabled = true;
+        const result = await sendSubmission(flow, form);
+        btn.textContent = txt; btn.disabled = false;
+        // Build a human-readable message for WhatsApp / Email
+        const message = buildMessage(flow, new FormData(form));
+        showAfterbar(message);
+        form.reset(); closeAll();
+      });
+    }
+    
+    bindSubmit('form-blinds','blinds');
+    bindSubmit('form-wood','wood');
+    bindSubmit('form-laser','laser');
+    bindSubmit('form-general','general');
+
+    // hCaptcha helpers (invisible)
+    // Provide a real site key in production; keep empty for preview so no network prompt.
+    const HCAPTCHA_SITEKEY = '';
+
+    function loadHCaptcha(){
+      return new Promise((resolve)=>{
+        if (!HCAPTCHA_SITEKEY) return resolve(false); // preview: skip
+        if (window.hcaptcha) return resolve(true);
+        const s = document.createElement('script');
+        s.src = 'https://js.hcaptcha.com/1/api.js';
+        s.async = true; s.defer = true; s.onload = ()=>resolve(true); s.onerror = ()=>resolve(false);
+        document.head.appendChild(s);
+      });
+    }
+
+    function ensureCaptcha(form){
+      let widget = form.querySelector('.h-captcha-widget');
+      if (widget) return widget;
+      widget = document.createElement('div');
+      widget.className = 'h-captcha-widget h-captcha invisible';
+      widget.setAttribute('data-sitekey', HCAPTCHA_SITEKEY);
+      widget.setAttribute('data-size', 'invisible');
+      form.appendChild(widget);
+      return widget;
+    }
+
+    async function executeCaptcha(form){
+      // In preview (no key) or if script fails, resolve null so backend/offline handles it gracefully
+      const loaded = await loadHCaptcha();
+      if (!loaded || !window.hcaptcha) return null;
+      return new Promise((resolve)=>{
+        const widget = ensureCaptcha(form);
+        const id = window.hcaptcha.render(widget, {
+          sitekey: HCAPTCHA_SITEKEY,
+          size: 'invisible',
+          callback: (token)=>{ resolve(token); window.hcaptcha.reset(id); }
+        });
+        window.hcaptcha.execute(id);
+      });
+    }
+
+    // Build a unified message per flow
+    function buildMessage(flow, fd){
+      const name = fd.get('name')||''; const phone = fd.get('phone')||''; const email = fd.get('email')||'';
+      let lines = [`AVD — ${flow.charAt(0).toUpperCase()+flow.slice(1)} quote`, `Name: ${name} | Phone: ${phone} | Email: ${email}`];
+      if (flow==='blinds') {
+        const qty=fd.get('qty')||''; const w=fd.get('width')||''; const d=fd.get('drop')||''; const mat=fd.get('material')||'';
+        lines.push(`Qty: ${qty} | Size: ${w} × ${d} mm | Material: ${mat}`);
+      }
+      const notes = fd.get('notes'); if (notes) lines.push(`Notes: ${notes}`);
+      return lines.filter(Boolean).join('\n');
+    }
+
+    // Afterbar actions
+    const afterbar = document.getElementById('afterbar');
+    const abWhats = document.getElementById('ab_whatsapp');
+    const abEmail = document.getElementById('ab_email');
+    const abClose = document.getElementById('ab_close');
+    function showAfterbar(message){
+      afterbar.dataset.message = message;
+      afterbar.classList.remove('hidden');
+    }
+    function hideAfterbar(){ afterbar.classList.add('hidden'); }
+    abClose.onclick = hideAfterbar;
+    abWhats.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.open('https://wa.me/27835921101?text='+encodeURIComponent(msg),'_blank'); };
+    abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.href = 'mailto:?subject='+encodeURIComponent('AVD enquiry')+'&body='+encodeURIComponent(msg); };
+    
+
+    // Show an "Other material" text field only when OTHER is selected
+    (function(){
+      const select = document.getElementById('b_material');
+      const wrap = document.getElementById('b_material_other_wrap');
+      const other = document.getElementById('b_material_other');
+      if(!select||!wrap) return;
+      const sync = ()=>{ if(select.value==='OTHER'){ wrap.classList.remove('hidden'); other.focus(); } else { wrap.classList.add('hidden'); other.value=''; } };
+      select.addEventListener('change', sync); sync();
+    })();
+
+    // When submitting blinds, if material is OTHER, replace material with typed value
+    (function(){
+      const form = document.getElementById('form-blinds');
+      form?.addEventListener('submit', ()=>{
+        const select = document.getElementById('b_material');
+        const other = document.getElementById('b_material_other');
+        if(select && select.value==='OTHER' && other){
+          // ensure FormData gets the text instead of the token OTHER
+          const ghost = document.createElement('input');
+          ghost.type='hidden'; ghost.name='material'; ghost.value=other.value || 'Other';
+          form.appendChild(ghost);
+        }
+      });
+    })();
+
+    // ------- Simple runtime tests (console) -------
+    ;(function runTests(){
+      try {
+        // Test buildMessage blinds flow
+        const fd = new FormData();
+        fd.append('name','Test User'); fd.append('phone','0123'); fd.append('email','t@t.com');
+        fd.append('qty','2'); fd.append('width','1000'); fd.append('drop','1500'); fd.append('material','FB01'); fd.append('notes','Hello');
+        const m = buildMessage('blinds', fd);
+        console.assert(m.includes('AVD — Blinds quote') || m.includes('AVD — Blinds & Window Treatments'), 'buildMessage header check');
+        console.assert(m.includes('Qty: 2'), 'buildMessage qty check');
+        console.assert(m.includes('Size: 1000 × 1500 mm'), 'buildMessage size check');
+
+        // Test OTHER material reveal
+        const sel = document.getElementById('b_material');
+        const wrap = document.getElementById('b_material_other_wrap');
+        if (sel && wrap) {
+          sel.value = 'OTHER'; sel.dispatchEvent(new Event('change'));
+          console.assert(!wrap.classList.contains('hidden'), 'OTHER reveals input');
+          sel.value = 'FB01'; sel.dispatchEvent(new Event('change'));
+          console.assert(wrap.classList.contains('hidden'), 'Non-OTHER hides input');
+        }
+        console.log('%cAVD tests passed','color:green');
+      } catch(e){ console.error('Tests failed', e); }
+    })();
+  </script>
+</body>
+</html>
