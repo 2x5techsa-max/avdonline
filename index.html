@@ -1,3 +1,10 @@
+# Complete index.html File
+
+Copy everything below this line and paste into your index.html:
+
+---
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,28 +23,20 @@
     .tooltip:hover .tooltiptext{visibility:visible;opacity:1}
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:50}
     .modal.open{display:flex}
-    #afterbar{transition: all 0.3s ease-in-out; z-index: 1000 !important;}
-    /* Validation highlighting */
     input:invalid, select:invalid, textarea:invalid { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important; background-color: #fef2f2 !important; }
     input:invalid:focus, select:invalid:focus, textarea:invalid:focus { outline: none; border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,0.2) !important; }
     .validation-error { color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem; display: block; }
   </style>
-  <!-- hCaptcha disabled in preview; loaded dynamically only if a real site key is provided. -->
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
   <main class="w-full max-w-3xl text-center">
-
-    <!-- LOGO -->
     <img src="http://avdesigns.org/wp-content/uploads/2016/10/cropped-cropped-ourlogo-1.png" alt="AVD Logo" class="w-20 h-auto mx-auto"/>
-
-    <!-- TITLE + SUBTITLE -->
     <h1 class="mt-6 text-3xl md:text-4xl font-extrabold text-gray-800">AV Designs Quote Portal</h1>
     <p class="mt-2 text-gray-500">How can we help you create something beautiful?</p>
 
-    <!-- FULL-WIDTH CONTACT BUTTONS WITH ICONS -->
     <div class="flex w-full justify-between gap-4 mt-6 mb-10">
       <div class="tooltip flex-1">
-        <a href="mailto:?subject=AVD%20Enquiry" class="flex justify-center items-center w-full py-3 rounded-lg border border-av text-av bg-white hover:bg-green-50 transition">
+        <a href="mailto:ryan@avdesigns.org?subject=AVD%20Enquiry" class="flex justify-center items-center w-full py-3 rounded-lg border border-av text-av bg-white hover:bg-green-50 transition">
           <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email" class="w-6 h-6"/>
         </a>
         <span class="tooltiptext">Email us</span>
@@ -56,7 +55,6 @@
       </div>
     </div>
 
-    <!-- CTA CARDS -->
     <div class="mt-8 space-y-6 text-center">
       <button id="btnBlinds" class="w-full rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
         <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">▮▮</div>
@@ -86,13 +84,13 @@
         <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">◎</div>
         <div>
           <div class="text-xl font-bold text-gray-800">General / Other Projects</div>
-          <div class="text-gray-600">If your request doesn’t fit the categories above, tell us your idea.</div>
+          <div class="text-gray-600">If your request doesn't fit the categories above, tell us your idea.</div>
         </div>
       </button>
     </div>
   </main>
 
-  <!-- MODALS (hidden by default) -->
+  <!-- MODALS -->
   <div id="modal-blinds" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
       <div class="flex items-center justify-between mb-2">
@@ -156,7 +154,6 @@
     </div>
   </div>
 
-  <!-- Wood Modal -->
   <div id="modal-wood" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
       <div class="flex items-center justify-between mb-2">
@@ -209,7 +206,6 @@
     </div>
   </div>
 
-  <!-- Laser Modal -->
   <div id="modal-laser" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
       <div class="flex items-center justify-between mb-2">
@@ -268,7 +264,6 @@
     </div>
   </div>
 
-  <!-- General Modal -->
   <div id="modal-general" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
       <div class="flex items-center justify-between mb-2">
@@ -316,49 +311,29 @@
     </div>
   </div>
 
-  <!-- AFTERBAR (post-submit actions) - AT TOP, WITH FULL BUTTONS INTACT -->
-  <div id="afterbar" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl p-6 border border-av max-w-md w-full mx-4 z-[1000]">
-    <div class="flex items-center justify-between mb-2">
-      <h4 class="font-semibold text-av text-lg">Quote Submitted!</h4>
-      <button id="ab_close" class="text-gray-500 hover:text-gray-700 text-xl">✕</button>
-    </div>
-    <p class="text-sm text-gray-600 mb-3">We've got your details. Next steps:</p>
-    <div class="flex gap-2">
-      <button id="ab_whatsapp" class="flex-1 bg-green-500 text-white py-3 rounded-lg px-4 text-sm font-medium hover:bg-green-600 transition">Send to WhatsApp</button>
-      <button id="ab_email" class="flex-1 bg-blue-500 text-white py-3 rounded-lg px-4 text-sm font-medium hover:bg-blue-600 transition">Email Summary</button>
-    </div>
-  </div>
-
   <script>
-    // Modal controls
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('AVD loaded - testing mode on'); // Debug log
-
-      // Open modals
+      console.log('AVD loaded - auto WhatsApp mode');
+      
       ['btnBlinds', 'btnWood', 'btnLaser', 'btnGeneral'].forEach(id => {
         document.getElementById(id).onclick = () => {
           const modalId = 'modal-' + id.replace('btn', '').toLowerCase();
           document.getElementById(modalId).classList.add('open');
-          console.log('Modal opened:', modalId); // Debug
         };
       });
-
-      // Close modals
+      
       document.querySelectorAll('[data-close]').forEach(btn => {
         btn.onclick = () => {
           btn.closest('.modal').classList.remove('open');
-          console.log('Modal closed'); // Debug
         };
       });
-
-      // Close on outside click
+      
       document.querySelectorAll('.modal').forEach(modal => {
         modal.onclick = (e) => {
           if (e.target === modal) modal.classList.remove('open');
         };
       });
-
-      // Unified validation and submit handler
+      
       function validateAndHighlight(form) {
         const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
         let isValid = true;
@@ -374,30 +349,26 @@
           }
         });
         if (!isValid) {
-          // Scroll to first invalid field
           fields[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
           fields[0].focus();
         }
         return isValid;
       }
-
-      // Submit handler (unified) - with validation
+      
       async function sendSubmission(flow, formEl) {
-        console.log('Submitting', flow); // Debug
+        console.log('Submitting', flow);
         const fd = new FormData(formEl);
         fd.append('flow', flow);
-        // attach hCaptcha token (skipped for preview)
         try{
           const res = await fetch('/.netlify/functions/createSubmission', { method:'POST', body: fd });
           const data = await res.json().catch(()=>({}));
           if(res.ok && data.ok){ 
-            console.log('Netlify success', data); // Debug
+            console.log('Netlify success', data);
             return { mode:'netlify', data: data.submission }; 
           }
           throw new Error(data.error || 'Server rejected');
         }catch(err){
-          console.log('Fallback to local', err); // Debug
-          // offline/local fallback
+          console.log('Fallback to local', err);
           const entry = Object.fromEntries([...new FormData(formEl).entries()]);
           entry.id = 'local-' + Date.now();
           entry.flow = flow;
@@ -409,115 +380,107 @@
           return { mode:'local', data: entry };
         }
       }
-
+      
       function bindSubmit(id, flow){
         const form = document.getElementById(id);
         if (!form) { console.error('Form not found:', id); return; }
         form.addEventListener('submit', async (e)=>{
           e.preventDefault();
-          console.log('Form submit triggered for', flow); // Debug
-          if (!validateAndHighlight(form)) {
-            console.log('Validation failed - highlighting fields'); // Debug
-            return;
-          }
+          if (!validateAndHighlight(form)) return;
+          
           const btn = form.querySelector('button[type="submit"]');
-          const txt = btn.textContent; btn.textContent = 'Submitting…'; btn.disabled = true;
-          const result = await sendSubmission(flow, form);
-          btn.textContent = txt; btn.disabled = false;
-          // Build a human-readable message for WhatsApp / Email
+          const txt = btn.textContent; 
+          btn.textContent = 'Submitting…'; 
+          btn.disabled = true;
+          
+          await sendSubmission(flow, form);
+          
+          btn.textContent = txt; 
+          btn.disabled = false;
+          
           const message = buildMessage(flow, new FormData(form));
-          console.log('Showing afterbar with message:', message); // Debug
-          showAfterbar(message);
-          form.reset(); closeAll();
+          
+          showSuccessAndOpenWhatsApp(message);
+          
+          form.reset(); 
+          closeAll();
         });
-        console.log('Submit bound to', id); // Debug
       }
       
       bindSubmit('form-blinds','blinds');
       bindSubmit('form-wood','wood');
       bindSubmit('form-laser','laser');
       bindSubmit('form-general','general');
-
-      // hCaptcha helpers (invisible) - skipped for preview
-      const HCAPTCHA_SITEKEY = '';
-
-      function loadHCaptcha(){
-        return new Promise((resolve)=>{
-          if (!HCAPTCHA_SITEKEY) return resolve(false); // preview: skip
-          if (window.hcaptcha) return resolve(true);
-          const s = document.createElement('script');
-          s.src = 'https://js.hcaptcha.com/1/api.js';
-          s.async = true; s.defer = true; s.onload = ()=>resolve(true); s.onerror = ()=>resolve(false);
-          document.head.appendChild(s);
-        });
-      }
-
-      function ensureCaptcha(form){
-        let widget = form.querySelector('.h-captcha-widget');
-        if (widget) return widget;
-        widget = document.createElement('div');
-        widget.className = 'h-captcha-widget h-captcha invisible';
-        widget.setAttribute('data-sitekey', HCAPTCHA_SITEKEY);
-        widget.setAttribute('data-size', 'invisible');
-        form.appendChild(widget);
-        return widget;
-      }
-
-      async function executeCaptcha(form){
-        // In preview (no key) or if script fails, resolve null so backend/offline handles it gracefully
-        const loaded = await loadHCaptcha();
-        if (!loaded || !window.hcaptcha) return null;
-        return new Promise((resolve)=>{
-          const widget = ensureCaptcha(form);
-          const id = window.hcaptcha.render(widget, {
-            sitekey: HCAPTCHA_SITEKEY,
-            size: 'invisible',
-            callback: (token)=>{ resolve(token); window.hcaptcha.reset(id); }
-          });
-          window.hcaptcha.execute(id);
-        });
-      }
-
-      // Build a unified message per flow
+      
       function buildMessage(flow, fd){
-        const name = fd.get('name')||''; const phone = fd.get('phone')||''; const email = fd.get('email')||'';
-        let lines = [`AVD — ${flow.charAt(0).toUpperCase()+flow.slice(1)} quote`, `Name: ${name} | Phone: ${phone} | Email: ${email}`];
+        const name = fd.get('name')||''; 
+        const phone = fd.get('phone')||''; 
+        const email = fd.get('email')||'';
+        let lines = [
+          `AVD — ${flow.charAt(0).toUpperCase()+flow.slice(1)} quote`, 
+          `Name: ${name}`,
+          `Phone: ${phone}`,
+          email ? `Email: ${email}` : null
+        ];
+        
         if (flow==='blinds') {
-          const qty=fd.get('qty')||''; const w=fd.get('width')||''; const d=fd.get('drop')||''; const mat=fd.get('material')||'';
-          lines.push(`Qty: ${qty} | Size: ${w} × ${d} mm | Material: ${mat}`);
+          const qty=fd.get('qty')||''; 
+          const w=fd.get('width')||''; 
+          const d=fd.get('drop')||''; 
+          const mat=fd.get('material')||'';
+          lines.push(`Qty: ${qty}`, `Size: ${w}×${d}mm`, `Material: ${mat}`);
         } else if (flow==='wood') {
-          const desc=fd.get('description')||''; const qty=fd.get('qty')||''; const dims=fd.get('dimensions')||''; const wood=fd.get('wood_type')||'';
-          lines.push(`Description: ${desc}`, `Qty: ${qty}`, `Dimensions: ${dims}`, `Wood/Finish: ${wood}`);
+          const desc=fd.get('description')||''; 
+          const qty=fd.get('qty')||''; 
+          const dims=fd.get('dimensions')||''; 
+          const wood=fd.get('wood_type')||'';
+          lines.push(`Description: ${desc}`, `Qty: ${qty}`, dims ? `Dimensions: ${dims}` : null, wood ? `Wood: ${wood}` : null);
         } else if (flow==='laser') {
-          const desc=fd.get('description')||''; const qty=fd.get('qty')||''; const dims=fd.get('dimensions')||''; const mat=fd.get('material')||'';
-          lines.push(`Description: ${desc}`, `Qty: ${qty}`, `Dimensions: ${dims}`, `Material: ${mat}`);
+          const desc=fd.get('description')||''; 
+          const qty=fd.get('qty')||''; 
+          const dims=fd.get('dimensions')||''; 
+          const mat=fd.get('material')||'';
+          lines.push(`Description: ${desc}`, `Qty: ${qty}`, dims ? `Dimensions: ${dims}` : null, mat ? `Material: ${mat}` : null);
         } else if (flow==='general') {
-          const desc=fd.get('description')||''; const budget=fd.get('budget')||''; const timeline=fd.get('timeline')||'';
-          lines.push(`Description: ${desc}`, `Budget: ${budget}`, `Timeline: ${timeline}`);
+          const desc=fd.get('description')||''; 
+          const budget=fd.get('budget')||''; 
+          const timeline=fd.get('timeline')||'';
+          lines.push(`Description: ${desc}`, budget ? `Budget: ${budget}` : null, timeline ? `Timeline: ${timeline}` : null);
         }
-        const notes = fd.get('notes'); if (notes) lines.push(`Notes: ${notes}`);
+        
+        const notes = fd.get('notes'); 
+        if (notes) lines.push(`Notes: ${notes}`);
+        
         return lines.filter(Boolean).join('\n');
       }
-
-      // Afterbar actions - with auto-focus
-      const afterbar = document.getElementById('afterbar');
-      const abWhats = document.getElementById('ab_whatsapp');
-      const abEmail = document.getElementById('ab_email');
-      const abClose = document.getElementById('ab_close');
-      function showAfterbar(message){
-        if (!afterbar) { console.error('Afterbar element missing!'); return; }
-        afterbar.dataset.message = message;
-        afterbar.classList.remove('hidden');
-        afterbar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); // Scroll to it
-        console.log('Afterbar shown'); // Debug
-      }
-      function hideAfterbar(){ afterbar.classList.add('hidden'); }
-abClose.onclick = hideAfterbar;
-abWhats.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.open('https://wa.me/27835921101?text='+encodeURIComponent(msg),'_blank'); hideAfterbar(); };
-abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.href = 'mailto:ryan@avdesigns.org?subject='+encodeURIComponent('AVD enquiry')+'&body='+encodeURIComponent(msg); hideAfterbar(); };
       
-
-      // Show an "Other material" text field only when OTHER is selected
+      function showSuccessAndOpenWhatsApp(message) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 border-2 border-av max-w-md z-[9999]';
+        toast.innerHTML = `
+          <div class="text-center">
+            <div class="text-6xl mb-4">✓</div>
+            <h3 class="text-2xl font-bold text-av mb-2">Quote Submitted!</h3>
+            <p class="text-gray-600 mb-4">Opening WhatsApp...</p>
+            <p class="text-sm text-gray-500">Just tap Send to complete your quote request</p>
+          </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          const waUrl = 'https://wa.me/27835921101?text=' + encodeURIComponent(message);
+          window.open(waUrl, '_blank');
+        }, 1000);
+        
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+      
+      function closeAll() {
+        document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+      }
+      
       (function(){
         const select = document.getElementById('b_material');
         const wrap = document.getElementById('b_material_other_wrap');
@@ -526,50 +489,18 @@ abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.
         const sync = ()=>{ if(select.value==='OTHER'){ wrap.classList.remove('hidden'); other.focus(); } else { wrap.classList.add('hidden'); other.value=''; } };
         select.addEventListener('change', sync); sync();
       })();
-
-      // When submitting blinds, if material is OTHER, replace material with typed value
+      
       (function(){
         const form = document.getElementById('form-blinds');
         form?.addEventListener('submit', (e)=>{
           const select = document.getElementById('b_material');
           const other = document.getElementById('b_material_other');
           if(select && select.value==='OTHER' && other){
-            // ensure FormData gets the text instead of the token OTHER
             const ghost = document.createElement('input');
             ghost.type='hidden'; ghost.name='material'; ghost.value=other.value || 'Other';
             form.appendChild(ghost);
           }
         });
-      })();
-
-      // Close all modals
-      function closeAll() {
-        document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
-      }
-
-      // ------- Simple runtime tests (console) -------
-      ;(function runTests(){
-        try {
-          // Test buildMessage blinds flow
-          const fd = new FormData();
-          fd.append('name','Test User'); fd.append('phone','0123'); fd.append('email','t@t.com');
-          fd.append('qty','2'); fd.append('width','1000'); fd.append('drop','1500'); fd.append('material','FB01'); fd.append('notes','Hello');
-          const m = buildMessage('blinds', fd);
-          console.assert(m.includes('AVD — Blinds quote') || m.includes('AVD — Blinds & Window Treatments'), 'buildMessage header check');
-          console.assert(m.includes('Qty: 2'), 'buildMessage qty check');
-          console.assert(m.includes('Size: 1000 × 1500 mm'), 'buildMessage size check');
-
-          // Test OTHER material reveal
-          const sel = document.getElementById('b_material');
-          const wrap = document.getElementById('b_material_other_wrap');
-          if (sel && wrap) {
-            sel.value = 'OTHER'; sel.dispatchEvent(new Event('change'));
-            console.assert(!wrap.classList.contains('hidden'), 'OTHER reveals input');
-            sel.value = 'FB01'; sel.dispatchEvent(new Event('change'));
-            console.assert(wrap.classList.contains('hidden'), 'Non-OTHER hides input');
-          }
-          console.log('%cAVD tests passed','color:green');
-        } catch(e){ console.error('Tests failed', e); }
       })();
     });
   </script>
