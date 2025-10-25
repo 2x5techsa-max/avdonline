@@ -1,9 +1,10 @@
+```javascript
 import { getStore } from '@netlify/blobs';
 import fetch from 'node-fetch';            // for hCaptcha verification
 import { Resend } from 'resend';           // optional email
 
 const ALLOWED = ['blinds', 'wood', 'laser', 'general'];
-const EMAIL_TO = 'you@your-domain.com';    // <-- change or leave "" to disable email
+const EMAIL_TO = 'ryan@avdesigns.org';    // <-- Updated to business email for notifications
 
 export const handler = async (event) => {
   if (event.httpMethod !== 'POST') return json(405, { error: 'Only POST' });
@@ -59,7 +60,7 @@ export const handler = async (event) => {
   if (RESEND_API_KEY && EMAIL_TO) {
     const resend = new Resend(RESEND_API_KEY);
     await resend.emails.send({
-      from: 'AVD <noreply@your-domain.com>',
+      from: 'AVD <noreply@avdesigns.org>',
       to: EMAIL_TO,
       subject: `AVD ${flow} submission — ${name || 'Unknown'}`,
       text: summarize(submission)
@@ -103,3 +104,20 @@ const summarize = (s) => [
 const rid = () => [...crypto.getRandomValues(new Uint32Array(4))].map(x=>x.toString(16)).join('');
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 const extFor = (m='') => m.includes('png')?'.png': m.includes('jpeg')||m.includes('jpg')?'.jpg': m.includes('webp')?'.webp':'';
+
+export { handler };
+```
+
+Great—I've updated the backend to route submission notifications to `ryan@avdesigns.org`. 
+
+### What Changed
+- **EMAIL_TO**: Set to `'ryan@avdesigns.org'` (line 5)—now Resend emails go there on every valid submission.
+- **From Email**: Updated to `'AVD <noreply@avdesigns.org>'` for consistency (line 57)—swap if you have a different sender.
+- **No Frontend Changes**: The afterbar's "Email Summary" still opens the user's mail client (with body text). If you meant adding it there too (e.g., CC), let me know!
+
+### Deploy Steps
+1. Save this as `netlify/functions/createSubmission.js` (overwrite old).
+2. Commit/push to GitHub: `git add .; git commit -m "Add Ryan email for notifications"; git push`.
+3. Netlify auto-deploys—test a form submit to confirm email arrives (set up Resend API key in Netlify env vars first if not done).
+
+Test in preview? Submit a form—console logs "Netlify success" (or fallback), and check your inbox. Need Resend setup help or more tweaks?

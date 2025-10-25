@@ -16,6 +16,11 @@
     .tooltip:hover .tooltiptext{visibility:visible;opacity:1}
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:50}
     .modal.open{display:flex}
+    #afterbar{transition: all 0.3s ease-in-out; z-index: 1000 !important;}
+    /* Validation highlighting */
+    input:invalid, select:invalid, textarea:invalid { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important; background-color: #fef2f2 !important; }
+    input:invalid:focus, select:invalid:focus, textarea:invalid:focus { outline: none; border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,0.2) !important; }
+    .validation-error { color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem; display: block; }
   </style>
   <!-- hCaptcha disabled in preview; loaded dynamically only if a real site key is provided. -->
 </head>
@@ -77,7 +82,7 @@
         </div>
       </button>
 
-      <button id="btnGeneral" class="w-full mx-auto rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
+      <button id="btnGeneral" class="w-full rounded-2xl p-6 shadow-glow hover:shadow-lg transition bg-gradient-to-r from-green-50 to-green-100 border border-green-200 flex flex-col items-center gap-2">
         <div class="shrink-0 w-12 h-12 rounded-full bg-av text-white flex items-center justify-center text-xl shadow">◎</div>
         <div>
           <div class="text-xl font-bold text-gray-800">General / Other Projects</div>
@@ -95,276 +100,478 @@
         <button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button>
       </div>
       <form id="form-blinds" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Quantity</label><input name="qty" type="number" min="1" value="1" class="w-full rounded-lg border border-border p-3" required></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Width (mm)</label><input name="width" type="number" min="200" class="w-full rounded-lg border border-border p-3" required></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Drop (mm)</label><input name="drop" type="number" min="200" class="w-full rounded-lg border border-border p-3" required></div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Your name <span class="text-red-500">*</span></label>
+          <input name="name" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your name.</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp <span class="text-red-500">*</span></label>
+          <input name="phone" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your phone.</span>
+        </div>
         <div class="md:col-span-2">
-          <label class="block text-sm text-gray-600 mb-1">Blind material</label>
-          <select id="b_material" name="material" class="w-full rounded-lg border border-border p-3">
+          <label class="block text-sm text-gray-600 mb-1">Email (optional)</label>
+          <input name="email" type="email" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Quantity <span class="text-red-500">*</span></label>
+          <input name="qty" type="number" min="1" value="1" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter quantity (min 1).</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Width (mm) <span class="text-red-500">*</span></label>
+          <input name="width" type="number" min="200" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter width (min 200mm).</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Drop (mm) <span class="text-red-500">*</span></label>
+          <input name="drop" type="number" min="200" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter drop (min 200mm).</span>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Blind material <span class="text-red-500">*</span></label>
+          <select id="b_material" name="material" class="w-full rounded-lg border border-border p-3" required>
+            <option value="">Select...</option>
             <option value="FB01">FB01 — Standard</option>
             <option value="FB02">FB02 — Premium</option>
             <option value="OTHER">Other (specify…)</option>
           </select>
-          <div id="b_material_other_wrap" class="mt-2 hidden">
-            <input id="b_material_other" name="material_other" class="w-full rounded-lg border border-border p-3" placeholder="Type the material / colour / supplier" />
-          </div>
+          <span class="validation-error hidden">Please select material.</span>
         </div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Picture of space</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes</label><textarea name="notes" rows="3" class="w-full rounded-lg border border-border p-3"></textarea></div>
-        <div class="md:col-span-2 flex gap-3 pt-2">
-          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
-          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        <div id="b_material_other_wrap" class="md:col-span-2 hidden">
+          <label class="block text-sm text-gray-600 mb-1">Specify other material</label>
+          <input id="b_material_other" name="material_other" class="w-full rounded-lg border border-border p-3">
         </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Notes / Additional details</label>
+          <textarea name="notes" rows="3" class="w-full rounded-lg border border-border p-3"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Photo (optional)</label>
+          <input name="photo" type="file" accept="image/*" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <button type="submit" class="md:col-span-2 w-full bg-av text-white py-3 rounded-lg font-semibold hover:bg-avlight transition">Get Quote</button>
       </form>
     </div>
   </div>
 
+  <!-- Wood Modal -->
   <div id="modal-wood" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
-      <div class="flex items-center justify-between mb-2"><h3 class="text-xl font-bold text-av">Bespoke Wooden Items — Brief</h3><button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button></div>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xl font-bold text-av">Bespoke Wooden Items — Quote</h3>
+        <button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button>
+      </div>
       <form id="form-wood" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Picture of desired item</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes / Description</label><textarea name="notes" rows="4" class="w-full rounded-lg border border-border p-3"></textarea></div>
-        <div class="md:col-span-2 flex gap-3 pt-2">
-          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
-          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Your name <span class="text-red-500">*</span></label>
+          <input name="name" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your name.</span>
         </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp <span class="text-red-500">*</span></label>
+          <input name="phone" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your phone.</span>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Email (optional)</label>
+          <input name="email" type="email" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Item description <span class="text-red-500">*</span></label>
+          <textarea name="description" rows="2" class="w-full rounded-lg border border-border p-3" required></textarea>
+          <span class="validation-error hidden">Please describe the item.</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Quantity <span class="text-red-500">*</span></label>
+          <input name="qty" type="number" min="1" value="1" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter quantity (min 1).</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Approximate dimensions (e.g., 1000x500x50 mm)</label>
+          <input name="dimensions" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Wood type / Finish</label>
+          <input name="wood_type" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Notes / Additional details</label>
+          <textarea name="notes" rows="3" class="w-full rounded-lg border border-border p-3"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Photo / Sketch (optional)</label>
+          <input name="photo" type="file" accept="image/*" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <button type="submit" class="md:col-span-2 w-full bg-av text-white py-3 rounded-lg font-semibold hover:bg-avlight transition">Get Quote</button>
       </form>
     </div>
   </div>
 
+  <!-- Laser Modal -->
   <div id="modal-laser" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
-      <div class="flex items-center justify-between mb-2"><h3 class="text-xl font-bold text-av">Laser Etching / Burning — Brief</h3><button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button></div>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xl font-bold text-av">Laser Etching / Burning — Quote</h3>
+        <button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button>
+      </div>
       <form id="form-laser" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Artwork / Picture</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes / Description</label><textarea name="notes" rows="4" class="w-full rounded-lg border border-border p-3"></textarea></div>
-        <div class="md:col-span-2 flex gap-3 pt-2">
-          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
-          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Your name <span class="text-red-500">*</span></label>
+          <input name="name" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your name.</span>
         </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp <span class="text-red-500">*</span></label>
+          <input name="phone" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your phone.</span>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Email (optional)</label>
+          <input name="email" type="email" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Project description (e.g., signage, gift engraving) <span class="text-red-500">*</span></label>
+          <textarea name="description" rows="2" class="w-full rounded-lg border border-border p-3" required></textarea>
+          <span class="validation-error hidden">Please describe the project.</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Quantity <span class="text-red-500">*</span></label>
+          <input name="qty" type="number" min="1" value="1" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter quantity (min 1).</span>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Dimensions (mm)</label>
+          <input name="dimensions" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Material (wood, leather, metal, etc.)</label>
+          <select name="material" class="w-full rounded-lg border border-border p-3">
+            <option value="">Select...</option>
+            <option value="wood">Wood</option>
+            <option value="leather">Leather</option>
+            <option value="metal">Metal</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Notes / Additional details</label>
+          <textarea name="notes" rows="3" class="w-full rounded-lg border border-border p-3"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Design file / Photo (optional)</label>
+          <input name="photo" type="file" accept="image/*,application/pdf" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <button type="submit" class="md:col-span-2 w-full bg-av text-white py-3 rounded-lg font-semibold hover:bg-avlight transition">Get Quote</button>
       </form>
     </div>
   </div>
 
+  <!-- General Modal -->
   <div id="modal-general" class="modal">
     <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 text-left">
-      <div class="flex items-center justify-between mb-2"><h3 class="text-xl font-bold text-av">General / Other Projects — Brief</h3><button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button></div>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xl font-bold text-av">General / Other Projects — Quote</h3>
+        <button data-close class="text-gray-500 hover:text-gray-700">Close ✕</button>
+      </div>
       <form id="form-general" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div><label class="block text-sm text-gray-600 mb-1">Your name</label><input name="name" class="w-full rounded-lg border border-border p-3" required></div>
-        <div><label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp</label><input name="phone" class="w-full rounded-lg border border-border p-3" required></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Email (optional)</label><input name="email" class="w-full rounded-lg border border-border p-3"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Reference picture (optional)</label><input name="photo" type="file" accept="image/*" class="w-full"></div>
-        <div class="md:col-span-2"><label class="block text-sm text-gray-600 mb-1">Notes / Description</label><textarea name="notes" rows="4" class="w-full rounded-lg border border-border p-3"></textarea></div>
-        <div class="md:col-span-2 flex gap-3 pt-2">
-          <button class="flex-1 px-4 py-3 rounded-lg bg-av text-white font-semibold" type="submit">Submit</button>
-          <button class="flex-1 px-4 py-3 rounded-lg border border-border bg-white" data-close type="button">Cancel</button>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Your name <span class="text-red-500">*</span></label>
+          <input name="name" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your name.</span>
         </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Phone / WhatsApp <span class="text-red-500">*</span></label>
+          <input name="phone" class="w-full rounded-lg border border-border p-3" required>
+          <span class="validation-error hidden">Please enter your phone.</span>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Email (optional)</label>
+          <input name="email" type="email" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Project description <span class="text-red-500">*</span></label>
+          <textarea name="description" rows="3" class="w-full rounded-lg border border-border p-3" required></textarea>
+          <span class="validation-error hidden">Please describe the project.</span>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Budget range (optional)</label>
+          <input name="budget" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Timeline (optional)</label>
+          <input name="timeline" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Notes / Additional details</label>
+          <textarea name="notes" rows="3" class="w-full rounded-lg border border-border p-3"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Photo / Reference (optional)</label>
+          <input name="photo" type="file" accept="image/*" class="w-full rounded-lg border border-border p-3">
+        </div>
+        <button type="submit" class="md:col-span-2 w-full bg-av text-white py-3 rounded-lg font-semibold hover:bg-avlight transition">Get Quote</button>
       </form>
     </div>
   </div>
 
-  <!-- AFTER-SUBMIT ACTIONS BAR -->
-  <div id="afterbar" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden z-50">
-    <div class="bg-white border border-border shadow-xl rounded-xl px-4 py-3 flex items-center gap-3">
-      <div class="text-sm text-gray-700">Send this message via:</div>
-      <button id="ab_whatsapp" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm font-semibold">WhatsApp</button>
-      <button id="ab_email" class="px-3 py-2 rounded-lg border border-border text-gray-800 text-sm bg-white">Email</button>
-      <button id="ab_close" class="ml-1 text-gray-400 hover:text-gray-600">✕</button>
+  <!-- AFTERBAR (post-submit actions) - AT TOP, WITH FULL BUTTONS INTACT -->
+  <div id="afterbar" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl p-6 border border-av max-w-md w-full mx-4 z-[1000]">
+    <div class="flex items-center justify-between mb-2">
+      <h4 class="font-semibold text-av text-lg">Quote Submitted!</h4>
+      <button id="ab_close" class="text-gray-500 hover:text-gray-700 text-xl">✕</button>
+    </div>
+    <p class="text-sm text-gray-600 mb-3">We've got your details. Next steps:</p>
+    <div class="flex gap-2">
+      <button id="ab_whatsapp" class="flex-1 bg-green-500 text-white py-3 rounded-lg px-4 text-sm font-medium hover:bg-green-600 transition">Send to WhatsApp</button>
+      <button id="ab_email" class="flex-1 bg-blue-500 text-white py-3 rounded-lg px-4 text-sm font-medium hover:bg-blue-600 transition">Email Summary</button>
     </div>
   </div>
 
-  <!-- RUNTIME -->
   <script>
-    // open/close modals
-    const modals = {
-      blinds: document.getElementById('modal-blinds'),
-      wood: document.getElementById('modal-wood'),
-      laser: document.getElementById('modal-laser'),
-      general: document.getElementById('modal-general'),
-    };
-    const open = (m)=> modals[m].classList.add('open');
-    const closeAll = ()=> Object.values(modals).forEach(m=>m.classList.remove('open'));
+    // Modal controls
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('AVD loaded - testing mode on'); // Debug log
 
-    document.getElementById('btnBlinds').onclick = ()=> open('blinds');
-    document.getElementById('btnWood').onclick   = ()=> open('wood');
-    document.getElementById('btnLaser').onclick  = ()=> open('laser');
-    document.getElementById('btnGeneral').onclick= ()=> open('general');
-    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', closeAll));
-    document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click', (e)=>{ if(e.target===m) closeAll(); }));
-
-    // BACKEND submit (with offline fallback)
-    async function sendSubmission(flow, formEl){
-      const fd = new FormData(formEl);
-      fd.append('flow', flow);
-      // attach hCaptcha token
-      const token = await executeCaptcha(formEl);
-      if (token) fd.append('hcaptcha_token', token);
-      try{
-        const res = await fetch('/.netlify/functions/createSubmission', { method:'POST', body: fd });
-        const data = await res.json().catch(()=>({}));
-        if(res.ok && data.ok){ return { mode:'netlify', data: data.submission }; }
-        throw new Error(data.error || 'Server rejected');
-      }catch(err){
-        // offline/local fallback
-        const entry = Object.fromEntries([...new FormData(formEl).entries()]);
-        entry.id = 'local-' + Date.now();
-        entry.flow = flow;
-        entry.ts = new Date().toISOString();
-        const KEY='avd_submissions_local';
-        const list = JSON.parse(localStorage.getItem(KEY) || '[]');
-        list.unshift(entry);
-        localStorage.setItem(KEY, JSON.stringify(list));
-        return { mode:'local', data: entry };
-      }
-    }
-
-    function bindSubmit(id, flow){
-      const form = document.getElementById(id);
-      form.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const btn = form.querySelector('button[type="submit"]');
-        const txt = btn.textContent; btn.textContent = 'Submitting…'; btn.disabled = true;
-        const result = await sendSubmission(flow, form);
-        btn.textContent = txt; btn.disabled = false;
-        // Build a human-readable message for WhatsApp / Email
-        const message = buildMessage(flow, new FormData(form));
-        showAfterbar(message);
-        form.reset(); closeAll();
+      // Open modals
+      ['btnBlinds', 'btnWood', 'btnLaser', 'btnGeneral'].forEach(id => {
+        document.getElementById(id).onclick = () => {
+          const modalId = 'modal-' + id.replace('btn', '').toLowerCase();
+          document.getElementById(modalId).classList.add('open');
+          console.log('Modal opened:', modalId); // Debug
+        };
       });
-    }
-    
-    bindSubmit('form-blinds','blinds');
-    bindSubmit('form-wood','wood');
-    bindSubmit('form-laser','laser');
-    bindSubmit('form-general','general');
 
-    // hCaptcha helpers (invisible)
-    // Provide a real site key in production; keep empty for preview so no network prompt.
-    const HCAPTCHA_SITEKEY = '';
-
-    function loadHCaptcha(){
-      return new Promise((resolve)=>{
-        if (!HCAPTCHA_SITEKEY) return resolve(false); // preview: skip
-        if (window.hcaptcha) return resolve(true);
-        const s = document.createElement('script');
-        s.src = 'https://js.hcaptcha.com/1/api.js';
-        s.async = true; s.defer = true; s.onload = ()=>resolve(true); s.onerror = ()=>resolve(false);
-        document.head.appendChild(s);
+      // Close modals
+      document.querySelectorAll('[data-close]').forEach(btn => {
+        btn.onclick = () => {
+          btn.closest('.modal').classList.remove('open');
+          console.log('Modal closed'); // Debug
+        };
       });
-    }
 
-    function ensureCaptcha(form){
-      let widget = form.querySelector('.h-captcha-widget');
-      if (widget) return widget;
-      widget = document.createElement('div');
-      widget.className = 'h-captcha-widget h-captcha invisible';
-      widget.setAttribute('data-sitekey', HCAPTCHA_SITEKEY);
-      widget.setAttribute('data-size', 'invisible');
-      form.appendChild(widget);
-      return widget;
-    }
+      // Close on outside click
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.onclick = (e) => {
+          if (e.target === modal) modal.classList.remove('open');
+        };
+      });
 
-    async function executeCaptcha(form){
-      // In preview (no key) or if script fails, resolve null so backend/offline handles it gracefully
-      const loaded = await loadHCaptcha();
-      if (!loaded || !window.hcaptcha) return null;
-      return new Promise((resolve)=>{
-        const widget = ensureCaptcha(form);
-        const id = window.hcaptcha.render(widget, {
-          sitekey: HCAPTCHA_SITEKEY,
-          size: 'invisible',
-          callback: (token)=>{ resolve(token); window.hcaptcha.reset(id); }
+      // Unified validation and submit handler
+      function validateAndHighlight(form) {
+        const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
+        let isValid = true;
+        fields.forEach(field => {
+          const errorSpan = field.parentNode.querySelector('.validation-error');
+          if (!field.validity.valid) {
+            isValid = false;
+            field.classList.add('border-red-500', 'bg-red-50');
+            if (errorSpan) errorSpan.classList.remove('hidden');
+          } else {
+            field.classList.remove('border-red-500', 'bg-red-50');
+            if (errorSpan) errorSpan.classList.add('hidden');
+          }
         });
-        window.hcaptcha.execute(id);
-      });
-    }
-
-    // Build a unified message per flow
-    function buildMessage(flow, fd){
-      const name = fd.get('name')||''; const phone = fd.get('phone')||''; const email = fd.get('email')||'';
-      let lines = [`AVD — ${flow.charAt(0).toUpperCase()+flow.slice(1)} quote`, `Name: ${name} | Phone: ${phone} | Email: ${email}`];
-      if (flow==='blinds') {
-        const qty=fd.get('qty')||''; const w=fd.get('width')||''; const d=fd.get('drop')||''; const mat=fd.get('material')||'';
-        lines.push(`Qty: ${qty} | Size: ${w} × ${d} mm | Material: ${mat}`);
+        if (!isValid) {
+          // Scroll to first invalid field
+          fields[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          fields[0].focus();
+        }
+        return isValid;
       }
-      const notes = fd.get('notes'); if (notes) lines.push(`Notes: ${notes}`);
-      return lines.filter(Boolean).join('\n');
-    }
 
-    // Afterbar actions
-    const afterbar = document.getElementById('afterbar');
-    const abWhats = document.getElementById('ab_whatsapp');
-    const abEmail = document.getElementById('ab_email');
-    const abClose = document.getElementById('ab_close');
-    function showAfterbar(message){
-      afterbar.dataset.message = message;
-      afterbar.classList.remove('hidden');
-    }
-    function hideAfterbar(){ afterbar.classList.add('hidden'); }
-    abClose.onclick = hideAfterbar;
-    abWhats.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.open('https://wa.me/27835921101?text='+encodeURIComponent(msg),'_blank'); };
-    abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.href = 'mailto:?subject='+encodeURIComponent('AVD enquiry')+'&body='+encodeURIComponent(msg); };
-    
+      // Submit handler (unified) - with validation
+      async function sendSubmission(flow, formEl) {
+        console.log('Submitting', flow); // Debug
+        const fd = new FormData(formEl);
+        fd.append('flow', flow);
+        // attach hCaptcha token (skipped for preview)
+        try{
+          const res = await fetch('/.netlify/functions/createSubmission', { method:'POST', body: fd });
+          const data = await res.json().catch(()=>({}));
+          if(res.ok && data.ok){ 
+            console.log('Netlify success', data); // Debug
+            return { mode:'netlify', data: data.submission }; 
+          }
+          throw new Error(data.error || 'Server rejected');
+        }catch(err){
+          console.log('Fallback to local', err); // Debug
+          // offline/local fallback
+          const entry = Object.fromEntries([...new FormData(formEl).entries()]);
+          entry.id = 'local-' + Date.now();
+          entry.flow = flow;
+          entry.ts = new Date().toISOString();
+          const KEY='avd_submissions_local';
+          const list = JSON.parse(localStorage.getItem(KEY) || '[]');
+          list.unshift(entry);
+          localStorage.setItem(KEY, JSON.stringify(list));
+          return { mode:'local', data: entry };
+        }
+      }
 
-    // Show an "Other material" text field only when OTHER is selected
-    (function(){
-      const select = document.getElementById('b_material');
-      const wrap = document.getElementById('b_material_other_wrap');
-      const other = document.getElementById('b_material_other');
-      if(!select||!wrap) return;
-      const sync = ()=>{ if(select.value==='OTHER'){ wrap.classList.remove('hidden'); other.focus(); } else { wrap.classList.add('hidden'); other.value=''; } };
-      select.addEventListener('change', sync); sync();
-    })();
+      function bindSubmit(id, flow){
+        const form = document.getElementById(id);
+        if (!form) { console.error('Form not found:', id); return; }
+        form.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          console.log('Form submit triggered for', flow); // Debug
+          if (!validateAndHighlight(form)) {
+            console.log('Validation failed - highlighting fields'); // Debug
+            return;
+          }
+          const btn = form.querySelector('button[type="submit"]');
+          const txt = btn.textContent; btn.textContent = 'Submitting…'; btn.disabled = true;
+          const result = await sendSubmission(flow, form);
+          btn.textContent = txt; btn.disabled = false;
+          // Build a human-readable message for WhatsApp / Email
+          const message = buildMessage(flow, new FormData(form));
+          console.log('Showing afterbar with message:', message); // Debug
+          showAfterbar(message);
+          form.reset(); closeAll();
+        });
+        console.log('Submit bound to', id); // Debug
+      }
+      
+      bindSubmit('form-blinds','blinds');
+      bindSubmit('form-wood','wood');
+      bindSubmit('form-laser','laser');
+      bindSubmit('form-general','general');
 
-    // When submitting blinds, if material is OTHER, replace material with typed value
-    (function(){
-      const form = document.getElementById('form-blinds');
-      form?.addEventListener('submit', ()=>{
+      // hCaptcha helpers (invisible) - skipped for preview
+      const HCAPTCHA_SITEKEY = '';
+
+      function loadHCaptcha(){
+        return new Promise((resolve)=>{
+          if (!HCAPTCHA_SITEKEY) return resolve(false); // preview: skip
+          if (window.hcaptcha) return resolve(true);
+          const s = document.createElement('script');
+          s.src = 'https://js.hcaptcha.com/1/api.js';
+          s.async = true; s.defer = true; s.onload = ()=>resolve(true); s.onerror = ()=>resolve(false);
+          document.head.appendChild(s);
+        });
+      }
+
+      function ensureCaptcha(form){
+        let widget = form.querySelector('.h-captcha-widget');
+        if (widget) return widget;
+        widget = document.createElement('div');
+        widget.className = 'h-captcha-widget h-captcha invisible';
+        widget.setAttribute('data-sitekey', HCAPTCHA_SITEKEY);
+        widget.setAttribute('data-size', 'invisible');
+        form.appendChild(widget);
+        return widget;
+      }
+
+      async function executeCaptcha(form){
+        // In preview (no key) or if script fails, resolve null so backend/offline handles it gracefully
+        const loaded = await loadHCaptcha();
+        if (!loaded || !window.hcaptcha) return null;
+        return new Promise((resolve)=>{
+          const widget = ensureCaptcha(form);
+          const id = window.hcaptcha.render(widget, {
+            sitekey: HCAPTCHA_SITEKEY,
+            size: 'invisible',
+            callback: (token)=>{ resolve(token); window.hcaptcha.reset(id); }
+          });
+          window.hcaptcha.execute(id);
+        });
+      }
+
+      // Build a unified message per flow
+      function buildMessage(flow, fd){
+        const name = fd.get('name')||''; const phone = fd.get('phone')||''; const email = fd.get('email')||'';
+        let lines = [`AVD — ${flow.charAt(0).toUpperCase()+flow.slice(1)} quote`, `Name: ${name} | Phone: ${phone} | Email: ${email}`];
+        if (flow==='blinds') {
+          const qty=fd.get('qty')||''; const w=fd.get('width')||''; const d=fd.get('drop')||''; const mat=fd.get('material')||'';
+          lines.push(`Qty: ${qty} | Size: ${w} × ${d} mm | Material: ${mat}`);
+        } else if (flow==='wood') {
+          const desc=fd.get('description')||''; const qty=fd.get('qty')||''; const dims=fd.get('dimensions')||''; const wood=fd.get('wood_type')||'';
+          lines.push(`Description: ${desc}`, `Qty: ${qty}`, `Dimensions: ${dims}`, `Wood/Finish: ${wood}`);
+        } else if (flow==='laser') {
+          const desc=fd.get('description')||''; const qty=fd.get('qty')||''; const dims=fd.get('dimensions')||''; const mat=fd.get('material')||'';
+          lines.push(`Description: ${desc}`, `Qty: ${qty}`, `Dimensions: ${dims}`, `Material: ${mat}`);
+        } else if (flow==='general') {
+          const desc=fd.get('description')||''; const budget=fd.get('budget')||''; const timeline=fd.get('timeline')||'';
+          lines.push(`Description: ${desc}`, `Budget: ${budget}`, `Timeline: ${timeline}`);
+        }
+        const notes = fd.get('notes'); if (notes) lines.push(`Notes: ${notes}`);
+        return lines.filter(Boolean).join('\n');
+      }
+
+      // Afterbar actions - with auto-focus
+      const afterbar = document.getElementById('afterbar');
+      const abWhats = document.getElementById('ab_whatsapp');
+      const abEmail = document.getElementById('ab_email');
+      const abClose = document.getElementById('ab_close');
+      function showAfterbar(message){
+        if (!afterbar) { console.error('Afterbar element missing!'); return; }
+        afterbar.dataset.message = message;
+        afterbar.classList.remove('hidden');
+        afterbar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); // Scroll to it
+        console.log('Afterbar shown'); // Debug
+      }
+      function hideAfterbar(){ afterbar.classList.add('hidden'); }
+      abClose.onclick = hideAfterbar;
+      abWhats.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.open('https://wa.me/27835921101?text='+encodeURIComponent(msg),'_blank'); };
+      abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.href = 'mailto:?subject='+encodeURIComponent('AVD enquiry')+'&body='+encodeURIComponent(msg); };
+      
+
+      // Show an "Other material" text field only when OTHER is selected
+      (function(){
         const select = document.getElementById('b_material');
-        const other = document.getElementById('b_material_other');
-        if(select && select.value==='OTHER' && other){
-          // ensure FormData gets the text instead of the token OTHER
-          const ghost = document.createElement('input');
-          ghost.type='hidden'; ghost.name='material'; ghost.value=other.value || 'Other';
-          form.appendChild(ghost);
-        }
-      });
-    })();
-
-    // ------- Simple runtime tests (console) -------
-    ;(function runTests(){
-      try {
-        // Test buildMessage blinds flow
-        const fd = new FormData();
-        fd.append('name','Test User'); fd.append('phone','0123'); fd.append('email','t@t.com');
-        fd.append('qty','2'); fd.append('width','1000'); fd.append('drop','1500'); fd.append('material','FB01'); fd.append('notes','Hello');
-        const m = buildMessage('blinds', fd);
-        console.assert(m.includes('AVD — Blinds quote') || m.includes('AVD — Blinds & Window Treatments'), 'buildMessage header check');
-        console.assert(m.includes('Qty: 2'), 'buildMessage qty check');
-        console.assert(m.includes('Size: 1000 × 1500 mm'), 'buildMessage size check');
-
-        // Test OTHER material reveal
-        const sel = document.getElementById('b_material');
         const wrap = document.getElementById('b_material_other_wrap');
-        if (sel && wrap) {
-          sel.value = 'OTHER'; sel.dispatchEvent(new Event('change'));
-          console.assert(!wrap.classList.contains('hidden'), 'OTHER reveals input');
-          sel.value = 'FB01'; sel.dispatchEvent(new Event('change'));
-          console.assert(wrap.classList.contains('hidden'), 'Non-OTHER hides input');
-        }
-        console.log('%cAVD tests passed','color:green');
-      } catch(e){ console.error('Tests failed', e); }
-    })();
+        const other = document.getElementById('b_material_other');
+        if(!select||!wrap) return;
+        const sync = ()=>{ if(select.value==='OTHER'){ wrap.classList.remove('hidden'); other.focus(); } else { wrap.classList.add('hidden'); other.value=''; } };
+        select.addEventListener('change', sync); sync();
+      })();
+
+      // When submitting blinds, if material is OTHER, replace material with typed value
+      (function(){
+        const form = document.getElementById('form-blinds');
+        form?.addEventListener('submit', (e)=>{
+          const select = document.getElementById('b_material');
+          const other = document.getElementById('b_material_other');
+          if(select && select.value==='OTHER' && other){
+            // ensure FormData gets the text instead of the token OTHER
+            const ghost = document.createElement('input');
+            ghost.type='hidden'; ghost.name='material'; ghost.value=other.value || 'Other';
+            form.appendChild(ghost);
+          }
+        });
+      })();
+
+      // Close all modals
+      function closeAll() {
+        document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+      }
+
+      // ------- Simple runtime tests (console) -------
+      ;(function runTests(){
+        try {
+          // Test buildMessage blinds flow
+          const fd = new FormData();
+          fd.append('name','Test User'); fd.append('phone','0123'); fd.append('email','t@t.com');
+          fd.append('qty','2'); fd.append('width','1000'); fd.append('drop','1500'); fd.append('material','FB01'); fd.append('notes','Hello');
+          const m = buildMessage('blinds', fd);
+          console.assert(m.includes('AVD — Blinds quote') || m.includes('AVD — Blinds & Window Treatments'), 'buildMessage header check');
+          console.assert(m.includes('Qty: 2'), 'buildMessage qty check');
+          console.assert(m.includes('Size: 1000 × 1500 mm'), 'buildMessage size check');
+
+          // Test OTHER material reveal
+          const sel = document.getElementById('b_material');
+          const wrap = document.getElementById('b_material_other_wrap');
+          if (sel && wrap) {
+            sel.value = 'OTHER'; sel.dispatchEvent(new Event('change'));
+            console.assert(!wrap.classList.contains('hidden'), 'OTHER reveals input');
+            sel.value = 'FB01'; sel.dispatchEvent(new Event('change'));
+            console.assert(wrap.classList.contains('hidden'), 'Non-OTHER hides input');
+          }
+          console.log('%cAVD tests passed','color:green');
+        } catch(e){ console.error('Tests failed', e); }
+      })();
+    });
   </script>
 </body>
 </html>
