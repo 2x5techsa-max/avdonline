@@ -512,9 +512,9 @@
         console.log('Afterbar shown'); // Debug
       }
       function hideAfterbar(){ afterbar.classList.add('hidden'); }
-      abClose.onclick = hideAfterbar;
-      abWhats.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.open('https://wa.me/27835921101?text='+encodeURIComponent(msg),'_blank'); };
-      abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.href = 'mailto:?subject='+encodeURIComponent('AVD enquiry')+'&body='+encodeURIComponent(msg); };
+abClose.onclick = hideAfterbar;
+abWhats.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.open('https://wa.me/27835921101?text='+encodeURIComponent(msg),'_blank'); hideAfterbar(); };
+abEmail.onclick = ()=>{ const msg=afterbar.dataset.message||''; window.location.href = 'mailto:ryan@avdesigns.org?subject='+encodeURIComponent('AVD enquiry')+'&body='+encodeURIComponent(msg); hideAfterbar(); };
       
 
       // Show an "Other material" text field only when OTHER is selected
