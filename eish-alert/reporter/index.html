@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#d32f2f">
+    <title>EishAlert - Fire Reporter</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRWlzaEFsZXJ0IEZpcmUgUmVwb3J0ZXIiLCJzaG9ydF9uYW1lIjoiRWlzaEFsZXJ0IiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJzdGFydF91cmwiOiIvIiwiaWNvbnMiOltdfQ==">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .status-online {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-offline {
+            background: #ff9800;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #b71c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+        }
+
+        .btn-secondary {
+            background: #1976d2;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #1565c0;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .photo-preview {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .photo-preview.visible {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #d32f2f;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: #1976d2;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+        }
+
+        .gps-status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .gps-acquiring {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .gps-acquired {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .gps-error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            button, .file-input-label {
+                font-size: 1rem;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 EishAlert</h1>
+            <div id="onlineStatus" class="status-badge status-online">Online</div>
+        </div>
+
+        <!-- Language Selection Screen -->
+        <div id="languageScreen" class="screen active">
+            <div class="card">
+                <h2 style="text-align: center; margin-bottom: 20px;">Select Language / Kies Taal</h2>
+                <div class="language-grid">
+                    <button class="btn-primary" onclick="selectLanguage('eng')">English</button>
+                    <button class="btn-primary" onclick="selectLanguage('afr')">Afrikaans</button>
+                    <button class="btn-primary" onclick="selectLanguage('xho')">isiXhosa</button>
+                    <button class="btn-primary" onclick="selectLanguage('zul')">isiZulu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Screen -->
+        <div id="reportScreen" class="screen">
+            <div class="card">
+                <h2 id="title" style="text-align: center; margin-bottom: 20px;"></h2>
+
+                <div id="gpsStatus" class="gps-status gps-acquiring"></div>
+
+                <div class="info-box" id="instructions"></div>
+
+                <label for="photoInput" class="file-input-label" id="photoLabel">
+                    📷 <span id="photoButtonText"></span>
+                </label>
+                <input type="file" id="photoInput" accept="image/*" capture="environment">
+
+                <img id="photoPreview" class="photo-preview">
+
+                <button id="sendButton" class="btn-primary" disabled onclick="sendAlert()"></button>
+
+                <div id="sendingStatus" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p id="sendingText" style="margin-top: 15px;"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="successScreen" class="screen">
+            <div class="card">
+                <div class="success-box">
+                    <h2 style="color: #4caf50; font-size: 3rem; margin-bottom: 20px;">✓</h2>
+                    <h3 id="successTitle" style="margin-bottom: 15px;"></h3>
+                    <p id="successMessage"></p>
+                </div>
+
+                <button class="btn-success" id="reportAnotherButton" onclick="reportAnother()"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            eng: {
+                title: 'Report Fire Emergency',
+                instructions: 'Take a photo of the fire and your location will be automatically captured. Then send the alert to the fire department.',
+                photoButton: 'Take Photo',
+                photoSelected: 'Photo Selected ✓',
+                sendButton: 'Send Alert',
+                sending: 'Sending alert...',
+                gpsAcquiring: '📍 Acquiring GPS location...',
+                gpsAcquired: '✓ Location acquired',
+                gpsError: '⚠ Could not get location (will send without GPS)',
+                successTitle: 'Alert Sent Successfully!',
+                successMessage: 'Fire department has been notified. Emergency responders will be dispatched.',
+                reportAnother: 'Report Another Fire',
+                online: 'Online',
+                offline: 'Offline (Reports will be queued)'
+            },
+            afr: {
+                title: 'Rapporteer Brand Noodgeval',
+                instructions: 'Neem \'n foto van die brand en jou ligging sal outomaties vasgevang word. Stuur dan die waarskuwing na die brandweer.',
+                photoButton: 'Neem Foto',
+                photoSelected: 'Foto Gekies ✓',
+                sendButton: 'Stuur Waarskuwing',
+                sending: 'Stuur waarskuwing...',
+                gpsAcquiring: '📍 Verkry GPS ligging...',
+                gpsAcquired: '✓ Ligging verkry',
+                gpsError: '⚠ Kon nie ligging kry nie (sal sonder GPS stuur)',
+                successTitle: 'Waarskuwing Suksesvol Gestuur!',
+                successMessage: 'Brandweer is in kennis gestel. Noodhulp sal gestuur word.',
+                reportAnother: 'Rapporteer Nog \'n Brand',
+                online: 'Aanlyn',
+                offline: 'Vanlyn (Verslae sal in die ry geplaas word)'
+            },
+            xho: {
+                title: 'Xela Ingxaki Yomlilo',
+                instructions: 'Thatha umfanekiso womlilo kwaye indawo yakho iya kubanjwa ngokuzenzekelayo. Emva koko thumela isilumkiso kwabasebenza bomlilo.',
+                photoButton: 'Thatha Umfanekiso',
+                photoSelected: 'Umfanekiso Ukhethiwe ✓',
+                sendButton: 'Thumela Isilumkiso',
+                sending: 'Ukuthumela isilumkiso...',
+                gpsAcquiring: '📍 Ukufumana indawo ye-GPS...',
+                gpsAcquired: '✓ Indawo ifunyenwe',
+                gpsError: '⚠ Ayikwazanga ukufumana indawo (iya kuthumela ngaphandle kwe-GPS)',
+                successTitle: 'Isilumkiso Sithunyelwe Ngempumelelo!',
+                successMessage: 'Abasebenza bomlilo bazisiwe. Abaphenduli beengxakelo baya kuthunyelwa.',
+                reportAnother: 'Xela Omnye Umlilo',
+                online: 'Uqhagamshelwe',
+                offline: 'Awuqhagamshelwe (Iingxelo ziya kulayishwa)'
+            },
+            zul: {
+                title: 'Bika Isimo Esiphuthumayo Somlilo',
+                instructions: 'Thatha isithombe somlilo bese indawo yakho ithathwa ngokuzenzakalelayo. Bese uthumela isexwayiso emnyangweni wezimboni zomlilo.',
+                photoButton: 'Thatha Isithombe',
+                photoSelected: 'Isithombe Sikhethiwe ✓',
+                sendButton: 'Thumela Isexwayiso',
+                sending: 'Ukuthumela isexwayiso...',
+                gpsAcquiring: '📍 Ukuthola indawo ye-GPS...',
+                gpsAcquired: '✓ Indawo itholiwe',
+                gpsError: '⚠ Ayikwazanga ukuthola indawo (izothumela ngaphandle kwe-GPS)',
+                successTitle: 'Isexwayiso Sithunyelwe Ngempumelelo!',
+                successMessage: 'Umnyango wezimboni zomlilo usazisiwe. Abaphenduli bezimo eziphuthumayo bazothunyelwa.',
+                reportAnother: 'Bika Omnye Umlilo',
+                online: 'Ku-inthanethi',
+                offline: 'Akukho ku-inthanethi (Imibiko izofakwa ohlwini)'
+            }
+        };
+
+        // State
+        let currentLanguage = 'eng';
+        let selectedPhoto = null;
+        let compressedPhoto = null;
+        let gpsLocation = null;
+        let deviceId = getOrCreateDeviceId();
+        let isOnline = navigator.onLine;
+
+        // Initialize IndexedDB for offline queue
+        let db;
+        const dbName = 'EishAlertDB';
+        const storeName = 'offlineQueue';
+
+        function initDB() {
+            const request = indexedDB.open(dbName, 1);
+
+            request.onerror = () => console.error('IndexedDB error:', request.error);
+
+            request.onsuccess = () => {
+                db = request.result;
+                processOfflineQueue();
+            };
+
+            request.onupgradeneeded = (event) => {
+                db = event.target.result;
+                if (!db.objectStoreNames.contains(storeName)) {
+                    db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+                }
+            };
+        }
+
+        initDB();
+
+        // Device ID
+        function getOrCreateDeviceId() {
+            let id = localStorage.getItem('eish_device_id');
+            if (!id) {
+                id = 'DEV-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('eish_device_id', id);
+            }
+            return id;
+        }
+
+        // Online/Offline status
+        window.addEventListener('online', () => {
+            isOnline = true;
+            updateOnlineStatus();
+            processOfflineQueue();
+        });
+
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            updateOnlineStatus();
+        });
+
+        function updateOnlineStatus() {
+            const statusEl = document.getElementById('onlineStatus');
+            const t = translations[currentLanguage];
+            if (isOnline) {
+                statusEl.className = 'status-badge status-online';
+                statusEl.textContent = t.online;
+            } else {
+                statusEl.className = 'status-badge status-offline';
+                statusEl.textContent = t.offline;
+            }
+        }
+
+        // Language selection
+        function selectLanguage(lang) {
+            currentLanguage = lang;
+            updateTexts();
+            showScreen('reportScreen');
+            acquireGPS();
+        }
+
+        function updateTexts() {
+            const t = translations[currentLanguage];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('instructions').textContent = t.instructions;
+            document.getElementById('photoButtonText').textContent = t.photoButton;
+            document.getElementById('sendButton').textContent = t.sendButton;
+            document.getElementById('sendingText').textContent = t.sending;
+            document.getElementById('successTitle').textContent = t.successTitle;
+            document.getElementById('successMessage').textContent = t.successMessage;
+            document.getElementById('reportAnotherButton').textContent = t.reportAnother;
+            updateOnlineStatus();
+            updateGPSStatus();
+        }
+
+        // GPS
+        function acquireGPS() {
+            const t = translations[currentLanguage];
+            const statusEl = document.getElementById('gpsStatus');
+            statusEl.className = 'gps-status gps-acquiring';
+            statusEl.textContent = t.gpsAcquiring;
+
+            if (!navigator.geolocation) {
+                statusEl.className = 'gps-status gps-error';
+                statusEl.textContent = t.gpsError;
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    gpsLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: Math.round(position.coords.accuracy)
+                    };
+                    statusEl.className = 'gps-status gps-acquired';
+                    statusEl.textContent = t.gpsAcquired;
+                    updateSendButton();
+                },
+                (error) => {
+                    console.error('GPS error:', error);
+                    statusEl.className = 'gps-status gps-error';
+                    statusEl.textContent = t.gpsError;
+                    updateSendButton();
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        function updateGPSStatus() {
+            const t = translations[currentLanguage];
+            const statusEl = document.getElementById('gpsStatus');
+            if (gpsLocation) {
+                statusEl.className = 'gps-status gps-acquired';
+                statusEl.textContent = t.gpsAcquired;
+            } else if (statusEl.className.includes('acquiring')) {
+                statusEl.textContent = t.gpsAcquiring;
+            } else if (statusEl.className.includes('error')) {
+                statusEl.textContent = t.gpsError;
+            }
+        }
+
+        // Photo handling
+        document.getElementById('photoInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            selectedPhoto = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('photoPreview');
+                preview.src = e.target.result;
+                preview.classList.add('visible');
+            };
+            reader.readAsDataURL(file);
+
+            // Compress image
+            compressedPhoto = await compressImage(file);
+
+            // Update button text
+            const t = translations[currentLanguage];
+            document.getElementById('photoButtonText').textContent = t.photoSelected;
+            document.getElementById('photoLabel').style.background = '#4caf50';
+
+            updateSendButton();
+        });
+
+        function updateSendButton() {
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = !compressedPhoto;
+        }
+
+        // Image compression
+        function compressImage(file, maxSizeKB = 500) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        const maxWidth = 1200;
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        let quality = 0.8;
+                        const tryCompress = (q) => {
+                            canvas.toBlob((blob) => {
+                                if (blob.size > maxSizeKB * 1024 && q > 0.3) {
+                                    tryCompress(q - 0.1);
+                                } else {
+                                    resolve(blob);
+                                }
+                            }, 'image/jpeg', q);
+                        };
+
+                        tryCompress(quality);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Send alert
+        async function sendAlert() {
+            const sendButton = document.getElementById('sendButton');
+            const sendingStatus = document.getElementById('sendingStatus');
+
+            sendButton.style.display = 'none';
+            sendingStatus.style.display = 'block';
+
+            const alertData = {
+                photo: compressedPhoto,
+                location: gpsLocation,
+                language: currentLanguage,
+                deviceId: deviceId,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                if (isOnline) {
+                    await sendToServer(alertData);
+                    showSuccess();
+                } else {
+                    await saveToOfflineQueue(alertData);
+                    showSuccess();
+                }
+            } catch (error) {
+                console.error('Send error:', error);
+                alert('Error sending alert. It has been saved and will be sent when you\'re back online.');
+                await saveToOfflineQueue(alertData);
+                showSuccess();
+            }
+        }
+
+        async function sendToServer(alertData) {
+            const formData = new FormData();
+            formData.append('photo', alertData.photo, 'fire.jpg');
+            formData.append('location', JSON.stringify(alertData.location));
+            formData.append('language', alertData.language);
+            formData.append('deviceId', alertData.deviceId);
+
+            const response = await fetch('/api/incidents', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+
+            return await response.json();
+        }
+
+        async function saveToOfflineQueue(alertData) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+
+                // Convert blob to base64 for storage
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const data = {
+                        photoBase64: reader.result,
+                        location: alertData.location,
+                        language: alertData.language,
+                        deviceId: alertData.deviceId,
+                        timestamp: alertData.timestamp
+                    };
+
+                    const request = store.add(data);
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                };
+                reader.readAsDataURL(alertData.photo);
+            });
+        }
+
+        async function processOfflineQueue() {
+            if (!db || !isOnline) return;
+
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.getAll();
+
+            request.onsuccess = async () => {
+                const queue = request.result;
+
+                for (const item of queue) {
+                    try {
+                        // Convert base64 back to blob
+                        const response = await fetch(item.photoBase64);
+                        const blob = await response.blob();
+
+                        await sendToServer({
+                            photo: blob,
+                            location: item.location,
+                            language: item.language,
+                            deviceId: item.deviceId
+                        });
+
+                        // Remove from queue
+                        const deleteTransaction = db.transaction([storeName], 'readwrite');
+                        const deleteStore = deleteTransaction.objectStore(storeName);
+                        deleteStore.delete(item.id);
+
+                    } catch (error) {
+                        console.error('Error processing queued item:', error);
+                        break; // Stop processing if one fails
+                    }
+                }
+            };
+        }
+
+        function showSuccess() {
+            showScreen('successScreen');
+        }
+
+        function reportAnother() {
+            // Reset state
+            selectedPhoto = null;
+            compressedPhoto = null;
+            gpsLocation = null;
+
+            document.getElementById('photoPreview').classList.remove('visible');
+            document.getElementById('photoInput').value = '';
+            document.getElementById('photoLabel').style.background = '#1976d2';
+            document.getElementById('sendButton').style.display = 'block';
+            document.getElementById('sendingStatus').style.display = 'none';
+
+            updateTexts();
+            showScreen('reportScreen');
+            acquireGPS();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Initialize online status
+        updateOnlineStatus();
+    </script>
+</body>
+</html>
